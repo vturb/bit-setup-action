@@ -46,23 +46,26 @@ runs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v3
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v3
+      id: cache-pnpm-restore
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
 
-    - uses: actions/cache@v3
-      name: Setup bit capsules cache
+    - uses: actions/cache/restore@v3
+      id: cache-bit-restore
+      name: Restore bit capsules cache
       if: ${{ inputs.cache-capsules == 'true' }}
       with:
         path: ${{ env.HOME }}/Library/Caches/Bit/capsules
         key: ${{ runner.os }}-bit-capsules
 
-    - uses: actions/cache@v3
-      name: Setup BVM cache
+    - uses: actions/cache/restore@v3
+      id: cache-bvm-restore
+      name: Restore BVM cache
       if: ${{ inputs.cache-bvm == 'true' }}
       with:
         path: |
@@ -89,3 +92,25 @@ runs:
         BIT_CONFIG_USER_TOKEN: ${{ inputs.bit-token }}
       with:
         ws-dir: ${{ inputs.ws-dir }}
+
+    - uses: actions/cache/save@v3
+      name: Save pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ steps.cache-pnpm-restore.outputs.cache-primary-key }}
+
+    - uses: actions/cache/save@v3
+      name: Save bit capsules cache
+      if: ${{ inputs.cache-capsules == 'true' }}
+      with:
+        path: ${{ env.HOME }}/Library/Caches/Bit/capsules
+        key: ${{ steps.cache-bit-restore.outputs.cache-primary-key }}
+
+    - uses: actions/cache/save@v3
+      name: Save BVM cache
+      if: ${{ inputs.cache-bvm == 'true' }}
+      with:
+        path: |
+          ${{ env.HOME }}/.bvm
+          ${{ env.HOME }}/bin
+        key: ${{ steps.cache-bvm-restore.outputs.cache-primary-key }}
