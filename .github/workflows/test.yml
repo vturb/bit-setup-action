@@ -1,0 +1,25 @@
+name: Bit Setup and test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+      GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+      BIT_CONFIG_USER_TOKEN: ${{ secrets.BIT_CONFIG_USER_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Bit Setup
+        uses: vturb/bit-setup-action@master
+        with:
+          bit-token: ${{ env.BIT_CONFIG_USER_TOKEN }}
+          ws-dir: ${{ github.workspace }}/test-data
+
+      - name: Bit Test
+        run: bit test

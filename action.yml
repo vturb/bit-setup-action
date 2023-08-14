@@ -1,0 +1,51 @@
+name: "Composite BitSetup Action"
+description: "A composite action that setup bit for with pnpm good rules and caching"
+inputs:
+  bit-token:
+    description: "Bit token"
+    required: true
+  ws-dir:
+    description: "Bit workspace path"
+    required: false
+  node-version:
+    description: "Node version"
+    required: false
+    default: "18"
+  pnpm-version:
+    description: "Pnpm version"
+    required: false
+    default: "latest"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+
+    - uses: pnpm/action-setup@v2
+      name: Install pnpm
+      with:
+        version: ${{ inputs.pnpm-version }}
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Initialize Bit
+      uses: bit-tasks/init@v1
+      env:
+        BIT_CONFIG_USER_TOKEN: ${{ inputs.bit-token }}
+      with:
+        ws-dir: ${{ inputs.ws-dir }}
