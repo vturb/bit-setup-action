@@ -50,7 +50,9 @@ runs:
       id: cache-pnpm-restore
       name: Restore pnpm cache
       with:
-        path: ${{ env.STORE_PATH }}
+        path: |
+          ${{ env.STORE_PATH }}
+          node_modules
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -97,7 +99,9 @@ runs:
     - uses: actions/cache/save@v3
       name: Save pnpm cache
       with:
-        path: ${{ env.STORE_PATH }}
+        path: |
+          ${{ env.STORE_PATH }}
+          node_modules
         key: ${{ steps.cache-pnpm-restore.outputs.cache-primary-key }}
 
     - uses: actions/cache/save@v3
