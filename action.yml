@@ -60,7 +60,7 @@ runs:
       name: Restore bit capsules cache
       if: ${{ inputs.cache-capsules == 'true' }}
       with:
-        path: ${{ env.HOME }}/Library/Caches/Bit/capsules
+        path: /home/runner/Library/Caches/Bit/capsules
         key: ${{ runner.os }}-bit-capsules
 
     - uses: actions/cache/restore@v3
@@ -69,8 +69,8 @@ runs:
       if: ${{ inputs.cache-bvm == 'true' }}
       with:
         path: |
-          ${{ env.HOME }}/.bvm/versions
-          ${{ env.HOME }}/bin/bit
+          /home/runner/.bvm/versions
+          /home/runner/bin/bit
         key: ${{ runner.os }}-bit-bvm
 
     - name: Resolve component packages from bit.cloud registry
@@ -104,7 +104,7 @@ runs:
       name: Save bit capsules cache
       if: ${{ inputs.cache-capsules == 'true' }}
       with:
-        path: ${{ env.HOME }}/Library/Caches/Bit/capsules
+        path: /home/runner/Library/Caches/Bit/capsules
         key: ${{ steps.cache-bit-restore.outputs.cache-primary-key }}
 
     - uses: actions/cache/save@v3
@@ -112,6 +112,6 @@ runs:
       if: ${{ inputs.cache-bvm == 'true' }}
       with:
         path: |
-          ${{ env.HOME }}/.bvm/versions
-          ${{ env.HOME }}/bin/bit
+          /home/runner/.bvm/versions
+          /home/runner/bin/bit
         key: ${{ steps.cache-bvm-restore.outputs.cache-primary-key }}
