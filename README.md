@@ -5,6 +5,7 @@ This action sets up Bit with good rules and caching using pnpm. It installs Node
 ### Inputs
 
 - `bit-token` (required): Bit token.
+- `resolve-org` (optional): Bit organization name, defines if should resolve dependencies using bit.
 - `ws-dir` (optional): Bit workspace path.
 - `node-version` (optional): Node version. Default is 18.
 - `pnpm-version` (optional): Pnpm version. Default is latest.
