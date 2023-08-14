@@ -69,8 +69,8 @@ runs:
       if: ${{ inputs.cache-bvm == 'true' }}
       with:
         path: |
-          ${{ env.HOME }}/.bvm
-          ${{ env.HOME }}/bin
+          ${{ env.HOME }}/.bvm/versions
+          ${{ env.HOME }}/bin/bit
         key: ${{ runner.os }}-bit-bvm
 
     - name: Resolve component packages from bit.cloud registry
@@ -90,6 +90,7 @@ runs:
       uses: bit-tasks/init@v1
       env:
         BIT_CONFIG_USER_TOKEN: ${{ inputs.bit-token }}
+        SHELL: bash
       with:
         ws-dir: ${{ inputs.ws-dir }}
 
@@ -111,6 +112,6 @@ runs:
       if: ${{ inputs.cache-bvm == 'true' }}
       with:
         path: |
-          ${{ env.HOME }}/.bvm
-          ${{ env.HOME }}/bin
+          ${{ env.HOME }}/.bvm/versions
+          ${{ env.HOME }}/bin/bit
         key: ${{ steps.cache-bvm-restore.outputs.cache-primary-key }}
