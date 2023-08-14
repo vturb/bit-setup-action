@@ -22,6 +22,10 @@ inputs:
     description: "Cache bit capsules"
     required: false
     default: "true"
+  cache-bvm:
+    description: "Cache bvm"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -55,9 +59,16 @@ runs:
       if: ${{ inputs.cache-capsules == 'true' }}
       with:
         path: ${{ env.HOME }}/Library/Caches/Bit/capsules
-        key: ${{ runner.os }}-bit-capsules-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-bit-capsules-
+        key: ${{ runner.os }}-bit-capsules
+
+    - uses: actions/cache@v3
+      name: Setup BVM cache
+      if: ${{ inputs.cache-bvm == 'true' }}
+      with:
+        path: |
+          ${{ env.HOME }}/.bvm
+          ${{ env.HOME }}/bin
+        key: ${{ runner.os }}-bit-bvm
 
     - name: Resolve component packages from bit.cloud registry
       shell: bash
