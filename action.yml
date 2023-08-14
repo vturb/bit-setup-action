@@ -89,7 +89,7 @@ runs:
         npm config set @${{ inputs.resolve-org }}:registry https://node.bit.cloud
 
     - name: Initialize Bit
-      uses: bit-tasks/init@v1
+      uses: vturb/bit-init-action@v1
       env:
         BIT_CONFIG_USER_TOKEN: ${{ inputs.bit-token }}
         SHELL: bash
