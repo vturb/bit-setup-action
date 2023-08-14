@@ -5,9 +5,8 @@ inputs:
     description: "Bit token"
     required: true
   resolve-org:
-    description: "Resolve org packages"
+    description: "Bit organization to resolve packages from bit.cloud registry"
     required: false
-    default: "false"
   ws-dir:
     description: "Bit workspace path"
     required: false
@@ -19,6 +18,10 @@ inputs:
     description: "Pnpm version"
     required: false
     default: "latest"
+  cache-capsules:
+    description: "Cache bit capsules"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -46,6 +49,15 @@ runs:
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
+
+    - uses: actions/cache@v3
+      name: Setup bit capsules cache
+      if: ${{ inputs.cache-capsules == 'true' }}
+      with:
+        path: ${{ env.HOME }}/Library/Caches/Bit/capsules
+        key: ${{ runner.os }}-bit-capsules-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-bit-capsules-
 
     - name: Resolve component packages from bit.cloud registry
       shell: bash

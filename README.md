@@ -9,6 +9,7 @@ This action sets up Bit with good rules and caching using pnpm. It installs Node
 - `ws-dir` (optional): Bit workspace path.
 - `node-version` (optional): Node version. Default is 18.
 - `pnpm-version` (optional): Pnpm version. Default is latest.
+- `cache-capsules` (optional): Cache bit capsules. Default is true.
 
 ### Example usage
 
