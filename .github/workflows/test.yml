@@ -22,5 +22,5 @@ jobs:
           ws-dir: ${{ github.workspace }}/test-data
 
       - name: Bit Test
-        working-directory: ${{ github.workspace }}/test-data
+        working-directory: ./test-data
         run: bit test
