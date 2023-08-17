@@ -93,8 +93,16 @@ runs:
       env:
         BIT_CONFIG_USER_TOKEN: ${{ inputs.bit-token }}
         SHELL: bash
+      if: inputs.ws-dir != ''  
       with:
         ws-dir: ${{ inputs.ws-dir }}
+
+    - name: Initialize Bit without ws-dir
+      uses: bit-tasks/init@v1
+      env:
+        BIT_CONFIG_USER_TOKEN: ${{ inputs.bit-token }}
+        SHELL: bash
+      if: inputs.ws-dir == ''
 
     - uses: actions/cache/save@v3
       name: Save pnpm cache
